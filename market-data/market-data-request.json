@@ -1,0 +1,5 @@
+{
+  "type": "subscribe",
+  "product_ids": ["ETH-USD", "BTC-USD", "DOGE-USD"],
+  "channels": ["ticker"]
+}
