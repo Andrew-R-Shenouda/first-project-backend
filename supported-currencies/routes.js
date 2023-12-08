@@ -1,6 +1,6 @@
 import currencyDatabase from "./currency-database.json" assert { type: "json" };
 
-function currencyDatabaseRoutes(app) {
+function supportedCurrencyRoutes(app) {
   app.get("/currencies", (req, res) => {
     const currencies = currencyDatabase;
     res.send(currencies);
@@ -22,4 +22,4 @@ function currencyDatabaseRoutes(app) {
     res.sendStatus(204);
   });
 }
-export default currencyDatabaseRoutes;
+export default supportedCurrencyRoutes;

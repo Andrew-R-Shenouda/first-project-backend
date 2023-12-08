@@ -1,19 +1,19 @@
-import marketDataRequest from "./market-data-request.json" assert { type: "json" };
+import marketDataRequest from "../websocket-connection-market-data/market-data-request.json" assert { type: "json" };
 
-function MarketDataRoutes(app) {
-  app.get("/marketDataRequest"),
+function userCurrencyRoutes(app) {
+  app.get("/CurrenciesInMarketDataRequest"),
     (req, res) => {
       const currencies = marketDataRequest.product_ids;
       res.send(currencies);
     };
 
-  app.post("/marketDataRequest", (req, res) => {
+  app.post("/CurrenciesInMarketDataRequest", (req, res) => {
     const currency = req.body + "-USD";
     marketDataRequest.product_ids.push(currency);
     res.send(currency);
   });
 
-  app.delete("/marketDataRequest", (req, res) => {
+  app.delete("/CurrenciesInMarketDataRequest", (req, res) => {
     const currencyToBeDeleted = req.body + "-USD";
     marketDataRequest.product_ids = marketDataRequest.product_ids.filter(
       (currency) => currency !== currencyToBeDeleted
@@ -21,4 +21,4 @@ function MarketDataRoutes(app) {
     res.sendStatus(204);
   });
 }
-export default MarketDataRoutes;
+export default userCurrencyRoutes;
