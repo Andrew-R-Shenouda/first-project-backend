@@ -1,24 +1,36 @@
-import marketDataRequest from "../websocket-connection-market-data/market-data-request.json" assert { type: "json" };
+import currencyDatabase from "./user-currency-database.json" assert { "type": "json" };
 
 function userCurrencyRoutes(app) {
-  app.get("/CurrenciesInMarketDataRequest"),
-    (req, res) => {
-      const currencies = marketDataRequest.product_ids;
-      res.send(currencies);
-    };
+  app.get("/userCurrencies", (req, res) => {
+    const currencies = currencyDatabase;
+    res.send(currencies);
+  });
 
-  app.post("/CurrenciesInMarketDataRequest", (req, res) => {
-    const currency = req.body + "-USD";
-    marketDataRequest.product_ids.push(currency);
+  app.post("/userCurrencies/:currencyLabel/:currencyValue", (req, res) => {
+    const { currencyLabel, currencyValue } = req.params;
+    const currency = { label: currencyLabel, value: currencyValue };
+    currencyDatabase.push(currency);
+    console.log("database", currencyDatabase);
     res.send(currency);
   });
 
-  app.delete("/CurrenciesInMarketDataRequest", (req, res) => {
-    const currencyToBeDeleted = req.body + "-USD";
-    marketDataRequest.product_ids = marketDataRequest.product_ids.filter(
-      (currency) => currency !== currencyToBeDeleted
-    );
-    res.sendStatus(204);
+  app.delete("/userCurrencies/:currencyValue", (req, res) => {
+    const { currencyValue } = req.params;
+    console.log({ currencyValue });
+
+    var index = -1;
+    for (var i = 0; i < currencyDatabase.length; i++) {
+      if (currencyDatabase[i].value == currencyValue) {
+        index = i;
+      }
+    }
+
+    if (index > -1) {
+      currencyDatabase.splice(index, 1);
+    }
+
+    console.log("database", currencyDatabase);
+    res.sendStatus(200);
   });
 }
 export default userCurrencyRoutes;
