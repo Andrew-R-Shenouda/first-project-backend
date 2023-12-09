@@ -1,5 +1,5 @@
 import currencyDatabase from "./user-currency-database.json" assert { "type": "json" };
-
+import updatemarketDataRequest from "../websocket-connection-market-data/updateMarketDataRequest.js";
 function userCurrencyRoutes(app) {
   app.get("/userCurrencies", (req, res) => {
     const currencies = currencyDatabase;
@@ -10,13 +10,12 @@ function userCurrencyRoutes(app) {
     const { currencyLabel, currencyValue } = req.params;
     const currency = { label: currencyLabel, value: currencyValue };
     currencyDatabase.push(currency);
-    console.log("database", currencyDatabase);
+    console.log("database:", currencyDatabase);
     res.send(currency);
   });
 
   app.delete("/userCurrencies/:currencyValue", (req, res) => {
     const { currencyValue } = req.params;
-    console.log({ currencyValue });
 
     var index = -1;
     for (var i = 0; i < currencyDatabase.length; i++) {
@@ -29,7 +28,7 @@ function userCurrencyRoutes(app) {
       currencyDatabase.splice(index, 1);
     }
 
-    console.log("database", currencyDatabase);
+    console.log("database:", currencyDatabase);
     res.sendStatus(200);
   });
 }

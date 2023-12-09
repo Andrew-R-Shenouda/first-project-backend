@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import marketDataRequest from "./market-data-request.json" assert { type: "json" };
+import marketDataRequest from "./marketDataRequest.js";
 const CoinbaseAPI = "wss://ws-feed.exchange.coinbase.com";
 
 function CreateCoinbaseWebSocketConnection(wss) {
