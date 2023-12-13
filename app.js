@@ -15,5 +15,6 @@ const httpserver = http.createServer(app);
 const wss = new WebSocketServer({
   port: 4040,
 });
-CreateCoinbaseWebSocketConnection(wss);
+const coinbaseConnection = CreateCoinbaseWebSocketConnection(wss); 
+export default coinbaseConnection;
 httpserver.listen(4000);

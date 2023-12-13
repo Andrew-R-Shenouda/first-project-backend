@@ -1,5 +1,6 @@
 import currencyDatabase from "./user-currency-database.json" assert { "type": "json" };
 import updatemarketDataRequest from "../websocket-connection-market-data/updateMarketDataRequest.js";
+
 function userCurrencyRoutes(app) {
   app.get("/userCurrencies", (req, res) => {
     const currencies = currencyDatabase;
@@ -10,6 +11,7 @@ function userCurrencyRoutes(app) {
     const { currencyLabel, currencyValue } = req.params;
     const currency = { label: currencyLabel, value: currencyValue };
     currencyDatabase.push(currency);
+    updatemarketDataRequest();
     console.log("database:", currencyDatabase);
     res.send(currency);
   });
@@ -26,6 +28,7 @@ function userCurrencyRoutes(app) {
 
     if (index > -1) {
       currencyDatabase.splice(index, 1);
+      updatemarketDataRequest();
     }
 
     console.log("database:", currencyDatabase);
