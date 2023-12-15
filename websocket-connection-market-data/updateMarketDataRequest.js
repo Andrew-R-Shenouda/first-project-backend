@@ -1,20 +1,33 @@
-import currencyDatabase from "../user-currencies/user-currency-database.json" assert { "type": "json" };
 import marketDataRequest from "./marketDataRequest.js";
-import coinbaseConnection from "../app.js"
+import coinbaseConnection from "../app.js";
+import * as dao from "../users/dao.js";
 
-function updatemarketDataRequest() {
-  const currencies = [];
+export const BASE_API = "http://localhost:4000";
+export const USERS_API = `${BASE_API}/users`;
 
-  currencyDatabase.forEach((item) => {
-    currencies.push(item.value + "-USD");
-  });
+async function updatemarketDataRequest(userId) {
+  try {
+    const currentUser = await dao.findUserById(userId);
+    console.log("current user:", currentUser);
 
-  marketDataRequest.product_ids = currencies;
+    const currencyDatabase = currentUser.currencies;
+    console.log("database:", currencyDatabase);
 
-  console.log("current request:", marketDataRequest);
+    const currencies = [];
 
-  /* Refresh the WebSocket to use the latest data in marketDataRequest*/
-  coinbaseConnection.reopenWebSocket();
+    currencyDatabase.forEach((item) => {
+      currencies.push(item.value + "-USD");
+    });
 
+    marketDataRequest.product_ids = currencies;
+
+    console.log("current request:", marketDataRequest);
+
+    // Refresh the WebSocket to use the latest data in marketDataRequest
+    coinbaseConnection.reopenWebSocket();
+  } catch (error) {
+    console.error("Error updating market data request:", error);
+  }
 }
+
 export default updatemarketDataRequest;

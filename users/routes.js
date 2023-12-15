@@ -1,11 +1,11 @@
 import * as dao from "./dao.js";
+import updatemarketDataRequest from "../websocket-connection-market-data/updateMarketDataRequest.js";
 
 function UserRoutes(app) {
   const createUser = async (req, res) => {
     const user = await dao.createUser(req.body);
     res.json(user);
   };
-  app.post("/users", createUser);
   const deleteUser = async (req, res) => {
     const status = await dao.deleteUser(req.params.userId);
     res.json(status);
@@ -23,6 +23,7 @@ function UserRoutes(app) {
     const status = await dao.updateUser(userId, req.body);
     const currentUser = await dao.findUserById(userId);
     req.session["currentUser"] = currentUser;
+    updatemarketDataRequest(userId);
     res.json(status);
   };
   const signup = async (req, res) => {
